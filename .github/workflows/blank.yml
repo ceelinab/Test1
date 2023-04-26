@@ -1,0 +1,12 @@
+name: Enable Dependabot
+
+on:
+  workflow_dispatch:
+
+jobs:
+  enable_dependabot:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Enable Dependabot
+      run: |
+        curl -XPUT -H "Accept: application/vnd.github+json" -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/ceelinab/Test1/vulnerability-alerts -d '{ "data": { "repository": { "vulnerabilityAlerts": { "isEnabled": true } } } }'
