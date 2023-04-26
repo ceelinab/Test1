@@ -1,0 +1,34 @@
+name: Enable Dependabot
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  enable-dependabot:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Enable Dependabot
+        uses: github-script@v5
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const { data: repository } = await github.repos.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo
+            });
+
+            await github.request({
+              method: 'PUT',
+              url: `/repos/${context.repo.owner}/${context.repo.repo}/vulnerability-alerts`,
+              headers: {
+                Accept: 'application/vnd.github+json'
+              },
+              data: {
+                enabled: true
+              }
+            });
